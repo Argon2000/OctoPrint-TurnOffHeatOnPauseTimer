@@ -109,6 +109,7 @@ class TurnOffHeatOnPauseTimerPlugin(
                     target = current_temps[k]["target"]
                     if current < target:
                         return
+            self.last_temps = None
             self.start_timer.cancel()
             self.start_timer = None
             printer.resume_print()
