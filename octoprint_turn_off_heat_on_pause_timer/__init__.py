@@ -57,13 +57,13 @@ class TurnOffHeatOnPauseTimerPlugin(
         if printer.is_paused():
             shut_off_heatbed = self._settings.get_float(["shut_off_heatbed"])
             shut_off_hotend = self._settings.get_float(["shut_off_hotend"])
-            if shut_off_hotend:
-                for i in range(self.printer_profile.extruder.count):
-                    self._logger.info("Turn off heat on pause timer: Turning off hotend{}".format(i+1))
-                    printer.set_temperature("tool{}".format(i), 0)
-            if shut_off_heatbed and self.printer_profile.heatedBed:
-                self._logger.info("Turn off heat on pause timer: Turning off heatbed")
-                printer.set_temperature("bed", 0)
+            for k in self._printer.get_current_temperatures().keys():
+                if k == "bed" and shut_off_heatbed:
+                    self._logger.info("Turn off heat on pause timer: Turning off heatbed")
+                    self._printer.set_temperature(k, 0)
+                elif k != "bed" and shut_off_hotend:
+                    self._logger.info("Turn off heat on pause timer: Turning off hotend {}".format(k))
+                    self._printer.set_temperature(k, 0)
 
     # ~~ Softwareupdate hook
     def get_update_information(self):
@@ -82,10 +82,6 @@ class TurnOffHeatOnPauseTimerPlugin(
                 "pip": "https://github.com/Argon2000/OctoPrint-TurnOffHeatOnPauseTimer/archive/{target_version}.zip",
             }
         }
-    
-    def set_printer_profile(self, path, file_object, blinks=None, printer_profile=None, allow_overwrite=True, *args, **kwargs):
-        self._logger.info("Turn off heat on pause timer: Setting printer profile")
-        self.printer_profile = printer_profile
 
 __plugin_name__ = "Turn off heat on pause timer"
 __plugin_version__ = "0.0.1"
@@ -98,6 +94,5 @@ def __plugin_load__():
 
     global __plugin_hooks__
     __plugin_hooks__ = {
-        "octoprint.filemanager.preprocessor": __plugin_implementation__.set_printer_profile,
         "octoprint.plugin.softwareupdate.check_config": __plugin_implementation__.get_update_information
     }
