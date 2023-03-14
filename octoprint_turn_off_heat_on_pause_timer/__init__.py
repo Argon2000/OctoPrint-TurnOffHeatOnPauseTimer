@@ -50,7 +50,7 @@ class TurnOffHeatOnPauseTimerPlugin(
 
     # ~~ EventHandlerPlugin mixin
     def on_event(self, event, payload):
-        if event == Events.PRINT_RESUMED and self.last_temps != None:
+        if event == Events.PRINT_RESUMED and self.check_temps_valid() == False:
             self._logger.info("Turn off heat on pause timer: Restoring temperatures, waiting and then resuming")
             for k in self.last_temps.keys():
                 self._printer.set_temperature(k, self.last_temps[k])
@@ -101,18 +101,23 @@ class TurnOffHeatOnPauseTimerPlugin(
 
     def start_on_temperatures_restored(self):
         printer = self._printer
-        if printer.is_paused() and self.last_temps != None:
+        if printer.is_paused() and self.check_temps_valid():
+            self.last_temps = None
+            self.start_timer.cancel()
+            self.start_timer = None
+            printer.resume_print()
+
+    def check_temps_valid(self):
+        temps_valid = True
+        if self.last_temps != None:
             current_temps = self._printer.get_current_temperatures()
             for k in current_temps.keys():
                 if k in self.last_temps.keys():
                     current = current_temps[k]["actual"]
                     target = current_temps[k]["target"]
                     if current < target:
-                        return
-            self.last_temps = None
-            self.start_timer.cancel()
-            self.start_timer = None
-            printer.resume_print()
+                        temps_valid = False
+        return temps_valid
 
     # ~~ Softwareupdate hook
     def get_update_information(self):
