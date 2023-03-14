@@ -9,14 +9,14 @@
 
         <div class="controls">
             <label class="checkbox-inline">
-                <input type="checkbox" data-bind="value: settings.plugins.turn_off_heat_on_pause_timer.shut_off_hotend"/>
+                <input type="checkbox" data-bind="checked: settings.plugins.turn_off_heat_on_pause_timer.shut_off_hotend"/>
                 {{ _('Turn off hotend') }}
             </label>
         </div>
 
         <div class="controls">
             <label class="checkbox-inline">
-                <input type="checkbox" data-bind="value: settings.plugins.turn_off_heat_on_pause_timer.shut_off_heatbed"/>
+                <input type="checkbox" data-bind="checked: settings.plugins.turn_off_heat_on_pause_timer.shut_off_heatbed"/>
                 {{ _('Turn off heatbed') }}
             </label>
         </div>

@@ -8,6 +8,7 @@ from octoprint.util import ResettableTimer
 class TurnOffHeatOnPauseTimerPlugin(
     octoprint.plugin.StartupPlugin,
     octoprint.plugin.SettingsPlugin,
+    octoprint.plugin.AssetPlugin,
     octoprint.plugin.TemplatePlugin,
     octoprint.plugin.EventHandlerPlugin
 ):
@@ -34,6 +35,12 @@ class TurnOffHeatOnPauseTimerPlugin(
         return [
             dict(type="settings", custom_bindings=False)
         ]
+    
+    # ~~ AssetPlugin mixin
+    def get_assets(self):
+        return {
+            "css": ["css/turn_off_heat_on_pause_timer.css"]
+        }
 
     # ~~ EventHandlerPlugin mixin
     def on_event(self, event, payload):
@@ -55,7 +62,7 @@ class TurnOffHeatOnPauseTimerPlugin(
                 for i in range(printer.extruder.count):
                     printer.set_temperature("tool{}".format(i), 0)
 
-    ##~~ Softwareupdate hook
+    # ~~ Softwareupdate hook
     def get_update_information(self):
         return {
             "turn_off_heat_on_pause_timer": {
