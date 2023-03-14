@@ -115,7 +115,7 @@ class TurnOffHeatOnPauseTimerPlugin(
             for k in current_temps.keys():
                 if k in self.last_temps.keys():
                     current = current_temps[k]["actual"]
-                    target = current_temps[k]["target"]
+                    target = self.last_temps[k]
                     self._logger.info("Turn off heat on pause timer: Current temp {}".format(current))
                     self._logger.info("Turn off heat on pause timer: Target temp {}".format(target))
                     if current < target:
