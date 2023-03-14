@@ -25,7 +25,8 @@ class TurnOffHeatOnPauseTimerPlugin(
         return {
             "timer_time_in_seconds": 600,
             "shut_off_heatbed": True,
-            "shut_off_hotend": True
+            "shut_off_hotend": True,
+            "shut_off_heated_chamber": False
         }
     
     # ~~ TemplatePlugin mixin
@@ -57,12 +58,16 @@ class TurnOffHeatOnPauseTimerPlugin(
         if printer.is_paused():
             shut_off_heatbed = self._settings.get_float(["shut_off_heatbed"])
             shut_off_hotend = self._settings.get_float(["shut_off_hotend"])
+            shut_off_heated_chamber = self._settings.get_float(["shut_off_heated_chamber"])
             for k in self._printer.get_current_temperatures().keys():
+                if ("tool" in k) and shut_off_hotend:
+                    self._logger.info("Turn off heat on pause timer: Turning off hotend {}".format(k))
+                    self._printer.set_temperature(k, 0)
                 if k == "bed" and shut_off_heatbed:
                     self._logger.info("Turn off heat on pause timer: Turning off heatbed")
                     self._printer.set_temperature(k, 0)
-                elif k != "bed" and shut_off_hotend:
-                    self._logger.info("Turn off heat on pause timer: Turning off hotend {}".format(k))
+                if k == "chamber" and shut_off_heated_chamber:
+                    self._logger.info("Turn off heat on pause timer: Turning off heated chamber")
                     self._printer.set_temperature(k, 0)
 
     # ~~ Softwareupdate hook

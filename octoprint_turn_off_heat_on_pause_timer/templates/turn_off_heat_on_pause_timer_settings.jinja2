@@ -20,5 +20,12 @@
                 {{ _('Turn off heatbed') }}
             </label>
         </div>
+
+        <div class="controls">
+            <label class="checkbox-inline">
+                <input type="checkbox" data-bind="checked: settings.plugins.turn_off_heat_on_pause_timer.shut_off_heated_chamber"/>
+                {{ _('Turn off heated chamber') }}
+            </label>
+        </div>
 	</div>
 </form>
