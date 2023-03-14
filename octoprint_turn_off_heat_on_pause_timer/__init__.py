@@ -56,10 +56,12 @@ class TurnOffHeatOnPauseTimerPlugin(
         if printer.is_paused():
             shut_off_heatbed = self._settings.get_float(["shut_off_heatbed"])
             shut_off_hotend = self._settings.get_float(["shut_off_hotend"])
-            if printer.heatedBed and shut_off_heatbed:
+            if printer.profile.heatedBed and shut_off_heatbed:
+                self._logger.info("Turn off heat on pause timer: Turning off heatbed")
                 printer.set_temperature("bed", 0)
             if shut_off_hotend:
-                for i in range(printer.extruder.count):
+                for i in range(printer.profile.extruder.count):
+                    self._logger.info("Turn off heat on pause timer: Turning off hotend{}".format(i+1))
                     printer.set_temperature("tool{}".format(i), 0)
 
     # ~~ Softwareupdate hook
