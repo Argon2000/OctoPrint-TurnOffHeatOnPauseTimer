@@ -8,15 +8,17 @@
         </div>
 
         <div class="controls">
-            <input type="checkbox" id="turn-off-hotend" data-bind="value: settings.plugins.turn_off_heat_on_pause_timer.shut_off_hotend">
-                <label for="turn-off-hotend" class="control-label">{{ _('Turn off hotend') }}</label>
-            </input>
+            <label class="checkbox-inline">
+                <input type="checkbox" data-bind="value: settings.plugins.turn_off_heat_on_pause_timer.shut_off_hotend"/>
+                {{ _('Turn off hotend') }}
+            </label>
         </div>
 
         <div class="controls">
-            <input type="checkbox" id="turn-off-heatbed" data-bind="value: settings.plugins.turn_off_heat_on_pause_timer.shut_off_heatbed">
-                <label for="turn-off-heatbed" class="control-label">{{ _('Turn off heatbed') }}</label>
-            </input>
+            <label class="checkbox-inline">
+                <input type="checkbox" data-bind="value: settings.plugins.turn_off_heat_on_pause_timer.shut_off_heatbed"/>
+                {{ _('Turn off heatbed') }}
+            </label>
         </div>
 	</div>
 </form>

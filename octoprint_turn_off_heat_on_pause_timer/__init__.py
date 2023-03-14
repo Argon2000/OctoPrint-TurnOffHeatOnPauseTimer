@@ -1,3 +1,6 @@
+# coding=utf-8
+from __future__ import absolute_import
+
 import octoprint.plugin
 from octoprint.events import Events
 from octoprint.util import ResettableTimer
@@ -26,6 +29,11 @@ class TurnOffHeatOnPauseTimerPlugin(
     # ~~ TemplatePlugin mixin
     def get_template_vars(self):
         return {"plugin_version": self._plugin_version}
+    
+    def get_template_configs(self):
+        return [
+            dict(type="settings", custom_bindings=False)
+        ]
 
     # ~~ EventHandlerPlugin mixin
     def on_event(self, event, payload):
@@ -47,14 +55,34 @@ class TurnOffHeatOnPauseTimerPlugin(
                 for i in range(printer.extruder.count):
                     printer.set_temperature("tool{}".format(i), 0)
 
+    ##~~ Softwareupdate hook
+    def get_update_information(self):
+        return {
+            "turn_off_heat_on_pause_timer": {
+                "displayName": "Turn_off_heat_on_pause_timer Plugin",
+                "displayVersion": self._plugin_version,
+
+                # version check: github repository
+                "type": "github_release",
+                "user": "Argon2000",
+                "repo": "OctoPrint-TurnOffHeatOnPauseTimer",
+                "current": self._plugin_version,
+
+                # update method: pip
+                "pip": "https://github.com/Argon2000/OctoPrint-TurnOffHeatOnPauseTimer/archive/{target_version}.zip",
+            }
+        }
+
 __plugin_name__ = "Turn off heat on pause timer"
 __plugin_version__ = "0.0.1"
 __plugin_description__ = "Enables setting a timer for how long after the printer is paused that it should turn off hotend and/or heatbed."
-__plugin_pythoncompat__ = ">=3.7,<4"
+__plugin_pythoncompat__ = ">=3,<4"
 
 def __plugin_load__():
     global __plugin_implementation__
     __plugin_implementation__ = TurnOffHeatOnPauseTimerPlugin()
 
     global __plugin_hooks__
-    __plugin_hooks__ = {}
+    __plugin_hooks__ = {
+        "octoprint.plugin.softwareupdate.check_config": __plugin_implementation__.get_update_information
+    }
