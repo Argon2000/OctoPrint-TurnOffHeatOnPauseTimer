@@ -1,16 +1,22 @@
 <h4>Turn off heat on pause <small>{{ _('Version') }} {{ plugin_turn_off_heat_on_pause_timer_plugin_version }}</small></h4>
 <form class="form-vertical">
 	<div class="control-group">
-        <label class="control-label">{{ _('Timer (in seconds):') }}</label>
-        <input type="number" class="form-control" placeholder="Enter time to shut off heat in seconds"
-            data-bind="value: settingsViewModel.settings.plugins.turn_off_heat_on_pause_timer.timer_time_in_seconds"/>
+        <div class="controls">
+            <label class="control-label">{{ _('Timer (in seconds):') }}</label>
+            <input type="number" class="form-control" placeholder="Enter time to shut off heat in seconds"
+                data-bind="value: settings.plugins.turn_off_heat_on_pause_timer.timer_time_in_seconds"/>
+        </div>
 
-        <input type="checkbox" id="turn-off-hotend" data-bind="value: settingsViewModel.settings.plugins.turn_off_heat_on_pause_timer.shut_off_hotend">
-            <label for="turn-off-hotend" class="control-label">{{ _('Turn off hotend') }}</label>
-        </input>
+        <div class="controls">
+            <input type="checkbox" id="turn-off-hotend" data-bind="value: settings.plugins.turn_off_heat_on_pause_timer.shut_off_hotend">
+                <label for="turn-off-hotend" class="control-label">{{ _('Turn off hotend') }}</label>
+            </input>
+        </div>
 
-        <input type="checkbox" id="turn-off-heatbed" data-bind="value: settingsViewModel.settings.plugins.turn_off_heat_on_pause_timer.shut_off_heatbed">
-            <label for="turn-off-heatbed" class="control-label">{{ _('Turn off heatbed') }}</label>
-        </input>
+        <div class="controls">
+            <input type="checkbox" id="turn-off-heatbed" data-bind="value: settings.plugins.turn_off_heat_on_pause_timer.shut_off_heatbed">
+                <label for="turn-off-heatbed" class="control-label">{{ _('Turn off heatbed') }}</label>
+            </input>
+        </div>
 	</div>
 </form>
