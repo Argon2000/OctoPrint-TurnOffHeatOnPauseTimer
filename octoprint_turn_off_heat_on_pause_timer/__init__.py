@@ -5,6 +5,7 @@ from octoprint.util import ResettableTimer
 class TurnOffHeatOnPauseTimerPlugin(
     octoprint.plugin.StartupPlugin,
     octoprint.plugin.SettingsPlugin,
+    octoprint.plugin.TemplatePlugin,
     octoprint.plugin.EventHandlerPlugin
 ):
     def __init__(self):
@@ -21,6 +22,10 @@ class TurnOffHeatOnPauseTimerPlugin(
             "shut_off_heatbed": True,
             "shut_off_hotend": True
         }
+    
+    # ~~ TemplatePlugin mixin
+    def get_template_vars(self):
+        return {"plugin_version": self._plugin_version}
 
     # ~~ EventHandlerPlugin mixin
     def on_event(self, event, payload):

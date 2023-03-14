@@ -1,5 +1,5 @@
 plugin_identifier = "turn_off_heat_on_pause_timer"
-plugin_package = "turn_off_heat_on_pause_timer"
+plugin_package = "octoprint_turn_off_heat_on_pause_timer"
 plugin_name = "OctoPrint-TurnOffHeatOnPauseTimer"
 plugin_version = "0.0.1"
 plugin_description = "Enables setting a timer for how long after the printer is paused that it should turn off hotend and/or heatbed."
