@@ -51,12 +51,12 @@ class TurnOffHeatOnPauseTimerPlugin(
     # ~~ EventHandlerPlugin mixin
     def on_event(self, event, payload):
         if event == Events.PRINT_RESUMED and self.last_temps != None:
-            self._logger.info("Turn off heat on pause timer: Restoring temperatures, waiting and then resuming")
             for k in self.last_temps.keys():
                 self._printer.set_temperature(k, self.last_temps[k])
             if self.stop_timer != None:
                 self.stop_timer.cancel()
             if self.check_temps_valid() == False:
+                self._logger.info("Turn off heat on pause timer: Restoring temperatures, pausing and then resuming")
                 self.start_timer = RepeatedTimer(1, self.start_on_temperatures_restored)
                 self.start_timer.start()
                 self.paused_by_plugin = True
@@ -78,7 +78,7 @@ class TurnOffHeatOnPauseTimerPlugin(
                 if k == "chamber" and shut_off_heated_chamber:
                     self.last_temps[k] = temps[k]["target"]
             time_in_seconds = self._settings.get_float(["timer_time_in_seconds"])
-            self._logger.info("Turn off heat on pause timer started! Will stop after {}".format(time_in_seconds))
+            self._logger.info("Turn off heat on pause timer started! Will stop after {} seconds".format(time_in_seconds))
             self.stop_timer = ResettableTimer(time_in_seconds, self.turn_off_heat)
             self.stop_timer.start()
 
@@ -116,8 +116,6 @@ class TurnOffHeatOnPauseTimerPlugin(
                 if k in self.last_temps.keys():
                     current = current_temps[k]["actual"]
                     target = self.last_temps[k]
-                    self._logger.info("Turn off heat on pause timer: Current temp {}".format(current))
-                    self._logger.info("Turn off heat on pause timer: Target temp {}".format(target))
                     if current < target:
                         temps_valid = False
                         break
