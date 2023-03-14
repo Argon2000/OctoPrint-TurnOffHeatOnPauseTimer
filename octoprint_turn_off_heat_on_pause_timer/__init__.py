@@ -83,7 +83,7 @@ class TurnOffHeatOnPauseTimerPlugin(
             }
         }
     
-    def createFilePreProcessor(self, path, file_object, blinks=None, printer_profile=None, allow_overwrite=True, *args, **kwargs):
+    def set_printer_profile(self, path, file_object, blinks=None, printer_profile=None, allow_overwrite=True, *args, **kwargs):
         self._logger.info("Turn off heat on pause timer: Setting printer profile")
         self.printer_profile = printer_profile
 
