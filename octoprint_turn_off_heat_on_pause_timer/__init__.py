@@ -59,14 +59,12 @@ class TurnOffHeatOnPauseTimerPlugin(
             shut_off_hotend = self._settings.get_float(["shut_off_hotend"])
             shut_off_heated_chamber = self._settings.get_float(["shut_off_heated_chamber"])
             for k in temps.keys():
-                for key in temps[k]:
-                    self._logger.info("Temps key: {}".format(key))
                 if ("tool" in k) and shut_off_hotend:
-                    self.lastTemps[k] = temps[k].target
+                    self.lastTemps[k] = temps[k]["target"]
                 if k == "bed" and shut_off_heatbed:
-                    self.lastTemps[k] = temps[k].target
+                    self.lastTemps[k] = temps[k]["target"]
                 if k == "chamber" and shut_off_heated_chamber:
-                    self.lastTemps[k] = temps[k].target
+                    self.lastTemps[k] = temps[k]["target"]
             time_in_seconds = self._settings.get_float(["timer_time_in_seconds"])
             self._logger.info("Turn off heat on pause timer started! Will stop after {}".format(time_in_seconds))
             self.timer = ResettableTimer(time_in_seconds, self.turn_off_heat)
