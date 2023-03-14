@@ -50,16 +50,17 @@ class TurnOffHeatOnPauseTimerPlugin(
 
     # ~~ EventHandlerPlugin mixin
     def on_event(self, event, payload):
-        if event == Events.PRINT_RESUMED and self.last_temps != None and self.check_temps_valid() == False:
+        if event == Events.PRINT_RESUMED and self.last_temps != None:
             self._logger.info("Turn off heat on pause timer: Restoring temperatures, waiting and then resuming")
             for k in self.last_temps.keys():
                 self._printer.set_temperature(k, self.last_temps[k])
             if self.stop_timer != None:
                 self.stop_timer.cancel()
-            self.start_timer = RepeatedTimer(1, self.start_on_temperatures_restored)
-            self.start_timer.start()
-            self.paused_by_plugin = True
-            self._printer.pause_print()
+            if self.check_temps_valid() == False:
+                self.start_timer = RepeatedTimer(1, self.start_on_temperatures_restored)
+                self.start_timer.start()
+                self.paused_by_plugin = True
+                self._printer.pause_print()
         if event == Events.PRINT_PAUSED:
             if self.paused_by_plugin:
                 self.paused_by_plugin = False
