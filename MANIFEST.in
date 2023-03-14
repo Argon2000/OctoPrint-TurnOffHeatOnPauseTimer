@@ -1,0 +1,4 @@
+include README.md
+recursive-include octoprint_turn_off_heat_on_pause_timer/templates *
+recursive-include octoprint_turn_off_heat_on_pause_timer/translations *
+recursive-include octoprint_turn_off_heat_on_pause_timer/static *
