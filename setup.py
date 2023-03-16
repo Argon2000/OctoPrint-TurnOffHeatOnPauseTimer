@@ -18,7 +18,7 @@ plugin_version = "0.0.1"
 
 # The plugin's description. Can be overwritten within OctoPrint's internal data via __plugin_description__ in the plugin
 # module
-plugin_description = """Enables setting a timer for how long after the printer is paused that it should turn off hotend and/or heatbed."""
+plugin_description = """Enables setting a timer for how long after the printer is paused that it should turn off hotend, heatbed and/or chamber."""
 
 # The plugin's author. Can be overwritten within OctoPrint's internal data via __plugin_author__ in the plugin module
 plugin_author = "Per Åstrand"

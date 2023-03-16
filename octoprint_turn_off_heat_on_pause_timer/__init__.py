@@ -128,7 +128,7 @@ class TurnOffHeatOnPauseTimerPlugin(
     def get_update_information(self):
         return {
             "turn_off_heat_on_pause_timer": {
-                "displayName": "Turn_off_heat_on_pause_timer Plugin",
+                "displayName": "Turn off heat on pause timer",
                 "displayVersion": self._plugin_version,
 
                 # version check: github repository
@@ -144,7 +144,7 @@ class TurnOffHeatOnPauseTimerPlugin(
 
 __plugin_name__ = "Turn off heat on pause timer"
 __plugin_version__ = "0.0.1"
-__plugin_description__ = "Enables setting a timer for how long after the printer is paused that it should turn off hotend and/or heatbed."
+__plugin_description__ = "Enables setting a timer for how long after the printer is paused that it should turn off hotend, heatbed and/or chamber."
 __plugin_pythoncompat__ = ">=3,<4"
 
 def __plugin_load__():
