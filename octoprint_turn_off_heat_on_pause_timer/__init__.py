@@ -30,7 +30,8 @@ class TurnOffHeatOnPauseTimerPlugin(
             "timer_time_in_seconds": 600,
             "shut_off_heatbed": True,
             "shut_off_hotend": True,
-            "shut_off_heated_chamber": False
+            "shut_off_heated_chamber": False,
+            "restore_temperatures": False
         }
     
     # ~~ TemplatePlugin mixin
@@ -50,26 +51,28 @@ class TurnOffHeatOnPauseTimerPlugin(
 
     # ~~ EventHandlerPlugin mixin
     def on_event(self, event, payload):
-        if event == Events.PRINT_RESUMED and self.last_temps != None:
-            for k in self.last_temps.keys():
-                self._printer.set_temperature(k, self.last_temps[k])
-            if self.stop_timer != None:
-                self.stop_timer.cancel()
-            if self.check_temps_valid() == False:
-                self._logger.info("Turn off heat on pause timer: Restoring temperatures, pausing and then resuming")
-                self.start_timer = RepeatedTimer(1, self.start_on_temperatures_restored)
-                self.start_timer.start()
-                self.paused_by_plugin = True
-                self._printer.pause_print()
+        if event == Events.PRINT_RESUMED and self.last_temps != None and self.restore_temperatures:
+            restore_temperatures = self._settings.get_boolean(["restore_temperatures"])
+            if restore_temperatures:
+                for k in self.last_temps.keys():
+                    self._printer.set_temperature(k, self.last_temps[k])
+                if self.stop_timer != None:
+                    self.stop_timer.cancel()
+                if self.check_temps_valid() == False:
+                    self._logger.info("Turn off heat on pause timer: Restoring temperatures, pausing and then resuming")
+                    self.start_timer = RepeatedTimer(1, self.start_on_temperatures_restored)
+                    self.start_timer.start()
+                    self.paused_by_plugin = True
+                    self._printer.pause_print()
         if event == Events.PRINT_PAUSED:
             if self.paused_by_plugin:
                 self.paused_by_plugin = False
                 return
             self.last_temps = dict()
             temps = self._printer.get_current_temperatures()
-            shut_off_heatbed = self._settings.get_float(["shut_off_heatbed"])
-            shut_off_hotend = self._settings.get_float(["shut_off_hotend"])
-            shut_off_heated_chamber = self._settings.get_float(["shut_off_heated_chamber"])
+            shut_off_heatbed = self._settings.get_boolean(["shut_off_heatbed"])
+            shut_off_hotend = self._settings.get_boolean(["shut_off_hotend"])
+            shut_off_heated_chamber = self._settings.get_boolean(["shut_off_heated_chamber"])
             for k in temps.keys():
                 if ("tool" in k) and shut_off_hotend:
                     self.last_temps[k] = temps[k]["target"]
@@ -86,9 +89,9 @@ class TurnOffHeatOnPauseTimerPlugin(
         printer = self._printer
         self.stop_timer = None
         if printer.is_paused():
-            shut_off_heatbed = self._settings.get_float(["shut_off_heatbed"])
-            shut_off_hotend = self._settings.get_float(["shut_off_hotend"])
-            shut_off_heated_chamber = self._settings.get_float(["shut_off_heated_chamber"])
+            shut_off_heatbed = self._settings.get_boolean(["shut_off_heatbed"])
+            shut_off_hotend = self._settings.get_boolean(["shut_off_hotend"])
+            shut_off_heated_chamber = self._settings.get_boolean(["shut_off_heated_chamber"])
             for k in self._printer.get_current_temperatures().keys():
                 if ("tool" in k) and shut_off_hotend:
                     self._logger.info("Turn off heat on pause timer: Turning off hotend {}".format(k))

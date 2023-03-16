@@ -27,5 +27,12 @@
                 {{ _('Turn off heated chamber') }}
             </label>
         </div>
+
+        <div class="controls">
+            <label class="checkbox-inline">
+                <input type="checkbox" data-bind="checked: settings.plugins.turn_off_heat_on_pause_timer.restore_temperatures"/>
+                {{ _('Restore temperatures on resume (Better to use GCODE script)') }}
+            </label>
+        </div>
 	</div>
 </form>
