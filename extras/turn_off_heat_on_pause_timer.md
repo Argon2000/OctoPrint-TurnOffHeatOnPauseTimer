@@ -23,6 +23,11 @@ tags:
 - shutdown
 - timer
 
+screenshots:
+- url: /assets/img/plugins/consolidate_temp_control/settings.png
+  alt: Settings
+  caption: Available settings
+
 featuredimage: /assets/img/plugins/consolidate_temp_control/settings.png
 
 # You only need the following if your plugin requires specific OctoPrint versions or
