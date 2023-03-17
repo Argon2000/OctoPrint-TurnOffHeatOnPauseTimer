@@ -24,11 +24,11 @@ tags:
 - timer
 
 screenshots:
-- url: /assets/img/plugins/consolidate_temp_control/settings.png
+- url: /assets/img/plugins/turn_off_heat_on_pause_timer/settings.png
   alt: Settings
   caption: Available settings
 
-featuredimage: /assets/img/plugins/consolidate_temp_control/settings.png
+featuredimage: /assets/img/plugins/turn_off_heat_on_pause_timer/settings.png
 
 # You only need the following if your plugin requires specific OctoPrint versions or
 # specific operating systems to function - you can safely remove the whole
