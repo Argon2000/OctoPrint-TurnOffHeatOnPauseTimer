@@ -22,7 +22,7 @@ class TurnOffHeatOnPauseTimerPlugin(
 
     # ~~ StartupPlugin mixin
     def on_after_startup(self):
-        self._logger.info("Turn off heat on pause timer plugin loaded!")
+        self._logger.debug("Turn off heat on pause timer plugin loaded!")
 
     # ~~ SettingsPlugin mixin
     def get_settings_defaults(self):
@@ -59,7 +59,7 @@ class TurnOffHeatOnPauseTimerPlugin(
                 if self.stop_timer != None:
                     self.stop_timer.cancel()
                 if self.check_temps_valid() == False:
-                    self._logger.info("Turn off heat on pause timer: Restoring temperatures, pausing and then resuming")
+                    self._logger.debug("Turn off heat on pause timer: Restoring temperatures, pausing and then resuming")
                     self.start_timer = RepeatedTimer(1, self.start_on_temperatures_restored)
                     self.start_timer.start()
                     self.paused_by_plugin = True
@@ -81,7 +81,7 @@ class TurnOffHeatOnPauseTimerPlugin(
                 if k == "chamber" and shut_off_heated_chamber:
                     self.last_temps[k] = temps[k]["target"]
             time_in_seconds = self._settings.get_float(["timer_time_in_seconds"])
-            self._logger.info("Turn off heat on pause timer started! Will stop after {} seconds".format(time_in_seconds))
+            self._logger.debug("Turn off heat on pause timer started! Will stop after {} seconds".format(time_in_seconds))
             self.stop_timer = ResettableTimer(time_in_seconds, self.turn_off_heat)
             self.stop_timer.start()
 
@@ -94,13 +94,13 @@ class TurnOffHeatOnPauseTimerPlugin(
             shut_off_heated_chamber = self._settings.get_boolean(["shut_off_heated_chamber"])
             for k in self._printer.get_current_temperatures().keys():
                 if ("tool" in k) and shut_off_hotend:
-                    self._logger.info("Turn off heat on pause timer: Turning off hotend {}".format(k))
+                    self._logger.debug("Turn off heat on pause timer: Turning off hotend {}".format(k))
                     self._printer.set_temperature(k, 0)
                 if k == "bed" and shut_off_heatbed:
-                    self._logger.info("Turn off heat on pause timer: Turning off heatbed")
+                    self._logger.debug("Turn off heat on pause timer: Turning off heatbed")
                     self._printer.set_temperature(k, 0)
                 if k == "chamber" and shut_off_heated_chamber:
-                    self._logger.info("Turn off heat on pause timer: Turning off heated chamber")
+                    self._logger.debug("Turn off heat on pause timer: Turning off heated chamber")
                     self._printer.set_temperature(k, 0)
 
     def start_on_temperatures_restored(self):
